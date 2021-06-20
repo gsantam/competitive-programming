@@ -1,24 +1,20 @@
-
 class Solution:
-    def checkSubarraySum(self, nums, k) -> bool:
-        if len(nums)==0:
-            return False
-        cumulative_nums = set([0])
-        cum = 0
-        if k==0:
-            for i in range(1,len(nums)):
-                if nums[i]==0 and nums[i-1]==0:
-                    return True
-            return False
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        cum_nums = [0 for i in range(len(nums)+1)]
         
         for i,num in enumerate(nums):
-            cum = (cum+num)%k
-            if cum in cumulative_nums and i>=1 and num!=0 and num%k!=0:
-                return True
-             
-            if num%k==0 and i>=1 and nums[i-1]%k==0:
-                return True
-
-            cumulative_nums.add(cum)
-            
-        return False
+            cum_nums[i+1] = cum_nums[i]+ num
+        total = 0
+        my_dict = dict()
+        
+        for i in range(len(cum_nums)):
+            if -(k-cum_nums[i]) in my_dict:
+                total+=my_dict[-(k-cum_nums[i])]
+            if cum_nums[i] not in my_dict:
+                my_dict[cum_nums[i]] = 0
+            my_dict[cum_nums[i]]+=1
+        return total
+                
+        
+                    
+        

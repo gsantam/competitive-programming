@@ -1,18 +1,17 @@
+from collections import defaultdict
+
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        if len(s)==0:
-            return 0
-        from_ = 0
-        longest_so_far = 1
-        char_in_interval = {s[0]:0}
-        
-        for i in range(1,len(s)):
-            if s[i] in char_in_interval:
-                while from_<char_in_interval[s[i]]+1:
-                    if from_ in char_in_interval:
-                        del char_in_interval[s[from_]]
-                    from_+=1
-            char_in_interval[s[i]] = i
-            longest_so_far = max(longest_so_far,i-from_+1)
-            
-        return longest_so_far
+        characters_included = defaultdict(lambda: 0)
+        i = -1
+        j = 0
+        longest = 0
+        while i<len(s)-1:
+            i+=1
+            characters_included[s[i]]+=1
+            while characters_included[s[i]]>1:
+                characters_included[s[j]]-=1
+                j+=1
+            longest = max(longest,(i-j)+1)
+
+        return longest
